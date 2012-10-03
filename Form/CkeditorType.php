@@ -45,13 +45,15 @@ class CkeditorType extends AbstractType
             }
         }
 
-        $default_toolbar_groups = $this->getDefaultOptions();
+        $default_toolbar_groups = $this->getDefaultOptions(array());
         $default_toolbar_groups = array_merge($default_toolbar_groups['toolbar_groups'], $options['toolbar_groups']);
         
         $builder
             ->setAttribute('toolbar', $options['toolbar'])
             ->setAttribute('toolbar_groups', $default_toolbar_groups)
+            ->setAttribute('contents_css', $options['contents_css'])
             ->setAttribute('ui_color', $options['ui_color'] ? '#'.ltrim($options['ui_color'], '#') : null)
+            ->setAttribute('styles_set', $options['styles_set'])
             ->setAttribute('startup_outline_blocks', $options['startup_outline_blocks'])
             ->setAttribute('width', $options['width'])
             ->setAttribute('height', $options['height'])
@@ -97,7 +99,9 @@ class CkeditorType extends AbstractType
         $view
             ->set('toolbar', $toolbar)
             ->set('startup_outline_blocks', $form->getAttribute('startup_outline_blocks'))
+            ->set('contents_css', $form->getAttribute('contents_css'))
             ->set('ui_color', $form->getAttribute('ui_color'))
+            ->set('styles_set', $form->getAttribute('styles_set'))
             ->set('width', $form->getAttribute('width'))
             ->set('height', $form->getAttribute('height'))
             ->set('language', $form->getAttribute('language'))
@@ -113,7 +117,7 @@ class CkeditorType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOptions(array $options = array())
+    public function getDefaultOptions(array $options)
     {
         return array(
             'required'                     => false,
@@ -121,7 +125,9 @@ class CkeditorType extends AbstractType
             'toolbar'                      => $this->container->getParameter('trsteel_ckeditor.ckeditor.toolbar'),
             'toolbar_groups'               => $this->container->getParameter('trsteel_ckeditor.ckeditor.toolbar_groups'),
             'startup_outline_blocks'       => $this->container->getParameter('trsteel_ckeditor.ckeditor.startup_outline_blocks'),
+            'contents_css'                  => null,
             'ui_color'                     => $this->container->getParameter('trsteel_ckeditor.ckeditor.ui_color'),
+            'styles_set'                   => null,
             'width'                        => $this->container->getParameter('trsteel_ckeditor.ckeditor.width'),
             'height'                       => $this->container->getParameter('trsteel_ckeditor.ckeditor.height'),
             'language'                     => $this->container->getParameter('trsteel_ckeditor.ckeditor.language'),
@@ -141,7 +147,7 @@ class CkeditorType extends AbstractType
      *
      * @return array The allowed option values
      */
-    public function getAllowedOptionValues(array $options = array())
+    public function getAllowedOptionValues(array $options)
     {
         return array(
             'required'               => array(false),
